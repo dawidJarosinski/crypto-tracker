@@ -73,15 +73,25 @@ public class CryptoService {
                 / cryptoFromDatabase.getPucharsePrice()) * 100) - 100;
     }
 
-    private CryptoResponse buildCryptoResponse(CryptoApiDto cryptoFromApi, CryptoEntity cryptoFromDatabase) {
+    private Double countPucharseValue(CryptoEntity crypto) {
+        return crypto.getPucharsePrice() * crypto.getQuantity();
+    }
+
+    private Double countActualValue(CryptoEntity cryptoEntity, CryptoApiDto cryptoApiDto) {
+        return cryptoApiDto.getCurrentPrice() * cryptoEntity.getQuantity();
+    }
+
+    private CryptoResponse buildCryptoResponse(CryptoApiDto cryptoApiDto, CryptoEntity cryptoEntity) {
         return CryptoResponse.builder()
-                .id(cryptoFromDatabase.getId())
-                .name(cryptoFromApi.getName())
-                .symbol(cryptoFromDatabase.getSymbol())
-                .quantity(cryptoFromDatabase.getQuantity())
-                .pucharsePrice(cryptoFromDatabase.getPucharsePrice())
-                .actualPrice(cryptoFromApi.getCurrentPrice())
-                .percentageChange(countPercentageChange(cryptoFromApi, cryptoFromDatabase))
+                .id(cryptoEntity.getId())
+                .name(cryptoApiDto.getName())
+                .symbol(cryptoEntity.getSymbol())
+                .quantity(cryptoEntity.getQuantity())
+                .pucharsePrice(cryptoEntity.getPucharsePrice())
+                .actualPrice(cryptoApiDto.getCurrentPrice())
+                .pucharseValue(countPucharseValue(cryptoEntity))
+                .actualValue(countActualValue(cryptoEntity, cryptoApiDto))
+                .percentageChange(countPercentageChange(cryptoApiDto, cryptoEntity))
                 .build();
     }
 

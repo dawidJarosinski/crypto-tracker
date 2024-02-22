@@ -9,5 +9,7 @@ public record CryptoResponse(Integer id,
                              Double quantity,
                              Float pucharsePrice,
                              Float actualPrice,
+                             Double pucharseValue,
+                             Double actualValue,
                              Float percentageChange) {
 }
